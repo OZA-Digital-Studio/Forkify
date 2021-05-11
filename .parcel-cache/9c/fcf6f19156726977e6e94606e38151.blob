@@ -1,0 +1,43 @@
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _iconsSvg = require("../../img/icons.svg"); // parcel@v2
+var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
+var _fractional = require("fractional"); // transforms 0.5 into '1/2'
+var _fractionalDefault = parcelHelpers.interopDefault(_fractional);
+var _viewJs = require("./view.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+class RecipeView extends _viewJsDefault.default {
+    _parentElement = document.querySelector('.recipe');
+    _data;
+    _errorMessage = 'We could not find this recipe. Please look for another one!';
+    _message = '';
+    addHandlerRender(handler) {
+        [
+            'hashchange',
+            'load'
+        ].forEach((e)=>window.addEventListener(e, handler)
+        );
+    }
+    addHandlerUpdateServings(handler) {
+        this._parentElement.addEventListener('click', function(e) {
+            const btn = e.target.closest('.btn--update-servings');
+            if (!btn) return;
+            const { updateTo  } = btn.dataset;
+            if (+updateTo > 0) handler(+updateTo);
+        });
+    }
+    addHandlerBookmark(handler) {
+        this._parentElement = dEventListener('click', function(e) {
+            const btn = e.target.closest('.btn--bookmark');
+            if (!btn) return;
+            handler();
+        });
+    }
+    _generateMarkup() {
+        return `<figure class="recipe__fig">\r\n        <img src="${this._data.image}" alt="Tomato" class="recipe__img" />\r\n        <h1 class="recipe__title">\r\n          <span>${this._data.title}</span>\r\n        </h1>\r\n      </figure>\r\n\r\n      <div class="recipe__details">\r\n        <div class="recipe__info">\r\n          <svg class="recipe__info-icon">\r\n            <use href="${_iconsSvgDefault.default}#icon-clock"></use>\r\n          </svg>\r\n          <span class="recipe__info-data recipe__info-data--minutes">${this._data.cookingTime}</span>\r\n          <span class="recipe__info-text">minutes</span>\r\n        </div>\r\n        <div class="recipe__info">\r\n          <svg class="recipe__info-icon">\r\n            <use href="${_iconsSvgDefault.default}#icon-users"></use>\r\n          </svg>\r\n          <span class="recipe__info-data recipe__info-data--people">${this._data.servings}</span>\r\n          <span class="recipe__info-text">servings</span>\r\n\r\n          <div class="recipe__info-buttons">\r\n            <button class="btn--tiny btn--update-servings" data-update-to="${this._data.servings - 1}">\r\n              <svg>\r\n                <use href="${_iconsSvgDefault.default}#icon-minus-circle"></use>\r\n              </svg>\r\n            </button>\r\n            <button class="btn--tiny btn--update-servings" data-update-to="${this._data.servings + 1}">\r\n              <svg>\r\n                <use href="${_iconsSvgDefault.default}#icon-plus-circle"></use>\r\n              </svg>\r\n            </button>\r\n          </div>\r\n        </div>\r\n\r\n        <div class="recipe__user-generated ${this._data.key ? '' : 'hidden'}">\r\n          <svg>\r\n            <use href="${_iconsSvgDefault.default}#icon-user"></use>\r\n          </svg>\r\n        </div>\r\n        <button class="btn--round btn--bookmark">\r\n          <svg class="">\r\n            <use href="${_iconsSvgDefault.default}#icon-bookmark${this._data.bookmarked ? '-fill' : ''}"></use>\r\n          </svg>\r\n        </button>\r\n      </div>\r\n\r\n      <div class="recipe__ingredients">\r\n        <h2 class="heading--2">Recipe ingredients</h2>\r\n        <ul class="recipe__ingredient-list">\r\n        ${this._data.ingredients.map(this._generateMarkupIngredient()).join('')}\r\n\r\n      <div class="recipe__directions">\r\n        <h2 class="heading--2">How to cook it</h2>\r\n        <p class="recipe__directions-text">\r\n          This recipe was carefully designed and tested by\r\n          <span class="recipe__publisher">${this._data.publisher}</span>. Please check out\r\n          directions at their website.\r\n        </p>\r\n        <a\r\n          class="btn--small recipe__btn"\r\n          href="${this._data.sourceUrl}"\r\n          target="_blank"\r\n        >\r\n          <span>Directions</span>\r\n          <svg class="search__icon">\r\n            <use href="${_iconsSvgDefault.default}#icon-arrow-right"></use>\r\n          </svg>\r\n        </a>\r\n      </div>`;
+    }
+    _generateMarkupIngredient(ing) {
+        return `\r\n    <li class="recipe__ingredient">\r\n    <svg class="recipe__icon">\r\n      <use href="${_iconsSvgDefault.default}#icon-check"></use>\r\n    </svg>\r\n    <div class="recipe__quantity">${ing.quantity ? new _fractionalDefault.default(ing.quantity).tostring() : ''}</div>\r\n    <div class="recipe__description">\r\n      <span class="recipe__unit">${ing.unit}</span>\r\n      ${ing.description}\r\n    </div>\r\n  </li>\r\n  `;
+    }
+}
+exports.default = new RecipeView();

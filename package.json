@@ -1,22 +1,22 @@
 {
   "name": "forkify",
   "version": "1.0.0",
-  "description": "recipes app",
+  "description": "Recipe application",
   "default": "index.html",
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.html"
+    "build": "parcel build index.html --dist-dir ./dist"
   },
-  "author": "Claudia Meneghesso",
+  "author": "Jonas Schedtmann",
   "license": "ISC",
   "devDependencies": {
-    "parcel": "^1.12.4",
+    "@parcel/transformer-sass": "^2.0.0-nightly.657",
     "sass": "^1.26.10"
   },
   "dependencies": {
     "core-js": "^3.6.5",
     "fractional": "^1.0.0",
-    "img": "^3.0.3",
+    "parcel": "^2.0.0-beta.1",
     "regenerator-runtime": "^0.13.7"
   }
 }
